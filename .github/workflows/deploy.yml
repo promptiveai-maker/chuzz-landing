@@ -1,0 +1,58 @@
+name: Build and deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck and lint
+        run: |
+          npx tsc --noEmit
+          npx eslint .
+
+      - name: Build the static export
+        env:
+          # The site is served from /chuzz-landing/ on github.io. On a real
+          # domain root both of these come out empty and the paths are clean.
+          NEXT_PUBLIC_BASE_PATH: /chuzz-landing
+          NEXT_PUBLIC_SITE_URL: https://promptiveai-maker.github.io/chuzz-landing
+        run: npm run build
+
+      - name: Keep GitHub Pages from running Jekyll over the export
+        run: touch out/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

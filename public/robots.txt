@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://promptiveai-maker.github.io/chuzz-landing/sitemap.xml

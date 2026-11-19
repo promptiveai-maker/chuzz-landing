@@ -1,0 +1,296 @@
+@import "tailwindcss";
+
+/* The three self hosted @font-face rules live in src/app/fonts.ts, because
+   their URLs have to carry the base path when the site is served from a
+   subfolder. The files themselves are in public/fonts. Nothing is fetched
+   from Google at runtime. */
+
+/* ---------------------------------------------------------------
+   Design tokens. Same values as the Meta ads campaign.
+   --------------------------------------------------------------- */
+:root {
+  --night: #1a1310;
+  --night-2: #241a16;
+  --teal: #00a4a3;
+  --amber: #f0a84a;
+  --cream: #faf7f1;
+  --cream-60: rgba(250, 247, 241, 0.6);
+  --forest: #14402f;
+  --forest-2: #1b5440;
+
+  --rule: rgba(0, 164, 163, 0.12);
+  --card-border: rgba(0, 164, 163, 0.14);
+
+  --font-he: "Heebo", "Arial Hebrew", system-ui, sans-serif;
+  --font-en: "Inter", "Heebo", system-ui, sans-serif;
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-night: var(--night);
+  --color-night-2: var(--night-2);
+  --color-teal: var(--teal);
+  --color-amber: var(--amber);
+  --color-cream: var(--cream);
+  --color-forest: var(--forest);
+  --color-forest-2: var(--forest-2);
+  --font-sans: var(--font-he);
+}
+
+html {
+  direction: rtl;
+}
+html[lang="en"] {
+  direction: ltr;
+}
+
+body {
+  background: var(--night);
+  color: var(--cream);
+  font-family: var(--font-he);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+html[lang="en"] body {
+  font-family: var(--font-en);
+}
+@media (min-width: 768px) {
+  body {
+    font-size: 1.1875rem;
+  }
+}
+
+/* Warm film grain over the whole page. One inline SVG, no image file. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Amber words inside a headline. <em> is not italic here. */
+em {
+  color: var(--amber);
+  font-style: normal;
+}
+
+/* Keyboard focus. Never removed anywhere. */
+:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ---------------------------------------------------------------
+   Base type
+   --------------------------------------------------------------- */
+.display {
+  font-family: var(--font-he);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.kicker {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--teal);
+}
+/* Uppercase is for Latin only. Hebrew has no upper case. */
+html[lang="en"] .kicker {
+  text-transform: uppercase;
+}
+
+.h-hero {
+  font-size: clamp(2.6rem, 10vw, 5.5rem);
+  line-height: 0.98;
+}
+.h-section {
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  line-height: 1.05;
+}
+.h-closing {
+  font-size: clamp(2.1rem, 7.5vw, 4rem);
+  line-height: 1.02;
+}
+
+/* ---------------------------------------------------------------
+   The one button to click, and its quieter sibling
+   --------------------------------------------------------------- */
+.btn-cta {
+  background: var(--forest);
+  color: var(--cream);
+  border-radius: 14px;
+  padding: 18px 30px;
+  font-weight: 600;
+  font-size: 1.0625rem;
+  display: inline-block;
+  transition: transform 120ms ease, background 120ms ease;
+}
+.btn-cta:hover {
+  background: var(--forest-2);
+  transform: translateY(-1px);
+}
+.btn-cta--sm {
+  border-radius: 999px;
+  padding: 14px 24px;
+  font-size: 1rem;
+}
+.btn-outline {
+  border: 1px solid var(--teal);
+  border-radius: 999px;
+  padding: 13px 24px;
+  font-weight: 600;
+  font-size: 1rem;
+  display: inline-block;
+  color: var(--cream);
+}
+.btn-outline:hover {
+  background: rgba(0, 164, 163, 0.08);
+}
+.btn-ghost {
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+.btn-ghost:hover {
+  border-color: var(--teal);
+}
+
+/* ---------------------------------------------------------------
+   Pieces used by more than one section
+   --------------------------------------------------------------- */
+.card {
+  background: var(--night-2);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+}
+
+.chip {
+  background: var(--night-2);
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  color: var(--teal);
+  padding: 10px 16px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.rule-top {
+  border-block-start: 1px solid var(--rule);
+}
+
+.step-number {
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: 5rem;
+  line-height: 1;
+  color: rgba(0, 164, 163, 0.3);
+}
+
+/* A short teal dash instead of a bullet, mirrored by logical properties. */
+.dash-list li {
+  position: relative;
+  padding-inline-start: 20px;
+}
+.dash-list li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.75em;
+  width: 8px;
+  height: 1px;
+  background: var(--teal);
+}
+
+/* Soft teal glow bleeding off the top edge, behind the hero. */
+.hero-glow {
+  position: absolute;
+  inset-inline: 0;
+  top: -280px;
+  height: 620px;
+  pointer-events: none;
+  background: radial-gradient(
+    60% 55% at 50% 40%,
+    rgba(0, 164, 163, 0.16),
+    rgba(0, 164, 163, 0) 70%
+  );
+}
+
+/* ---------------------------------------------------------------
+   Questions. Native details and summary, so it works with no JS.
+   --------------------------------------------------------------- */
+details {
+  border-block-start: 1px solid var(--rule);
+}
+details:last-of-type {
+  border-block-end: 1px solid var(--rule);
+}
+summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-block: 18px;
+  font-weight: 600;
+  font-size: 1.0625rem;
+}
+summary::-webkit-details-marker {
+  display: none;
+}
+.plus {
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  position: relative;
+  margin-top: 0.45em;
+  color: var(--teal);
+}
+.plus::before,
+.plus::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+.plus::before {
+  inset-inline: 0;
+  top: 6px;
+  height: 2px;
+}
+.plus::after {
+  inset-block: 0;
+  inset-inline-start: 6px;
+  width: 2px;
+  transition: transform 150ms ease;
+}
+details[open] .plus::after {
+  transform: rotate(90deg);
+}
+
+/* ---------------------------------------------------------------
+   Quiet motion. Sections fade up once, never on scroll back.
+   --------------------------------------------------------------- */
+.reveal {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 500ms ease, transform 500ms ease;
+  }
+  .js .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+}
