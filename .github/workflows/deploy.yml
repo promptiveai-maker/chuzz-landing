@@ -27,11 +27,6 @@ jobs:
 
       - run: npm ci
 
-      - name: Typecheck and lint
-        run: |
-          npx tsc --noEmit
-          npx eslint .
-
       - name: Build the static export
         env:
           # The site is served from /chuzz-landing/ on github.io. On a real
@@ -39,6 +34,13 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: /chuzz-landing
           NEXT_PUBLIC_SITE_URL: https://promptiveai-maker.github.io/chuzz-landing
         run: npm run build
+
+      # After the build, because next build is what writes next-env.d.ts,
+      # and that file is what teaches TypeScript about imported images.
+      - name: Typecheck and lint
+        run: |
+          npx tsc --noEmit
+          npx eslint .
 
       - name: Keep GitHub Pages from running Jekyll over the export
         run: touch out/.nojekyll
